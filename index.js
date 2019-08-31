@@ -9,8 +9,12 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  io.emit(CHAT_EVENT, 'server: someone connected');
+  io.emit(CHAT_EVENT, {
+    user: 'server',
+    msg: 'someone connected',
+  });
 
+  // Broadcast message to all clients
   socket.on(CHAT_EVENT, event => {
     console.log(event);
     io.emit(CHAT_EVENT, event);
@@ -18,7 +22,10 @@ io.on('connection', function(socket) {
 
   socket.on('disconnect', reason => {
     console.log('WTFTWFWTFWTF ', reason);
-    io.emit(CHAT_EVENT, 'server: someone disconnected');
+    io.emit(CHAT_EVENT, {
+      user: 'server',
+      msg: 'someone disconnected',
+    });
   });
 });
 

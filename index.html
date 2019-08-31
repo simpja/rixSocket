@@ -44,6 +44,7 @@
     </style>
   </head>
   <body>
+    <div class="bb">Username: <input id="username" autocomplete="off" /></div>
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
@@ -53,14 +54,44 @@
     <script>
       $(function() {
         var socket = io();
+
+        // SEND SOCKET STUFF
         $('form').submit(function(e) {
           e.preventDefault(); // prevents page reloading
-          socket.emit('chat message', $('#m').val());
+
+          const user = $('#username').val();
+          const msg = $('#m').val();
+
+          const messageObj = {
+            user: user,
+            msg: msg,
+          };
+
+          socket.emit('chat message', messageObj);
+
           $('#m').val(''); // Clear input field.
           return false;
         });
-        socket.on('chat message', function(msg) {
-          $('#messages').append($('<li>').text(msg));
+
+        // RECEIVE SOCKET STUFF
+        socket.on('chat message', function(msgObject) {
+          var urlReg = new RegExp(
+            /(https?: \/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/,
+          );
+
+          const isUrl = msgObject.msg.match(urlReg);
+          if (isUrl) {
+            $('<li><a></a></li>') // li
+              .find('a') // a
+              .attr('href', msgObject.msg) // a
+              .html(`${msgObject.user}: ${msgObject.msg}`) // a
+              .end() // li
+              .appendTo('#messages');
+          } else {
+            $('#messages').append(
+              $('<li>').text(`${msgObject.user}: ${msgObject.msg}`),
+            );
+          }
         });
       });
     </script>
