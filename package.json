@@ -1,0 +1,23 @@
+{
+  "name": "rixsocket",
+  "version": "0.0.1",
+  "description": "rikard lærer bort sockets",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "rixSocket"
+  },
+  "keywords": [
+    "socket",
+    "rix1"
+  ],
+  "author": "rix1 & simpja",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.2.0"
+  }
+}
