@@ -69,6 +69,9 @@
 
           socket.emit('chat message', messageObj);
 
+          //add my own message directly into html
+          $('#messages').append($('<li>').text(`Me <3: ${messageObj.msg}`));
+
           $('#m').val(''); // Clear input field.
           return false;
         });
@@ -87,6 +90,8 @@
               .html(`${msgObject.user}: ${msgObject.msg}`) // a
               .end() // li
               .appendTo('#messages');
+          } else if (msgObject.user == $('#username').val()) {
+            console.log('my own message!');
           } else {
             $('#messages').append(
               $('<li>').text(`${msgObject.user}: ${msgObject.msg}`),
