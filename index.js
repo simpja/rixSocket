@@ -20,8 +20,18 @@ io.on('connection', function(socket) {
     io.emit(CHAT_EVENT, event);
   });
 
+  // broadcast new guest in chat
+  socket.on('username', event => {
+    console.log(event);
+    var msg = event + ' joined the chat!';
+    io.emit(CHAT_EVENT, {
+      user: 'server',
+      msg: msg,
+    });
+  });
+
   socket.on('disconnect', reason => {
-    console.log('WTFTWFWTFWTF ', reason);
+    console.log('disconnected', reason);
     io.emit(CHAT_EVENT, {
       user: 'server',
       msg: 'someone disconnected',
